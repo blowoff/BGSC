@@ -4,6 +4,13 @@ import requests
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "Hello, Gunicorn!"
+
+if __name__ == "__main__":
+    app.run()
+
 # Arkham 제공 웹훅 토큰 (보안을 위해 .env 파일 사용 추천)
 ARKHAM_WEBHOOK_TOKEN = "Mmda5FmsFuCBdZ"
 
