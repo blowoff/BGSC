@@ -1,21 +1,20 @@
-
 from flask import Flask, request, jsonify
 import requests
+import os
+from dotenv import load_dotenv
+
+# .env 파일 로드 (보안 강화)
+load_dotenv()
 
 app = Flask(__name__)
+
+# 환경 변수에서 값 불러오기
+ARKHAM_WEBHOOK_TOKEN = os.getenv("ARKHAM_WEBHOOK_TOKEN")
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 @app.route("/")
 def home():
     return "Hello, Gunicorn!"
-
-if __name__ == "__main__":
-    app.run()
-
-# Arkham 제공 웹훅 토큰 (보안을 위해 .env 파일 사용 추천)
-ARKHAM_WEBHOOK_TOKEN = "Mmda5FmsFuCBdZ"
-
-# 디스코드 웹훅 URL (네가 설정한 디스코드 웹훅으로 변경!)
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1347635345717465270/2z46mlr1py-Jp5Yak60UCWSHiacLy0iLf3scw27c72x7haqdpgd9218XQRrK9Y5KsAE0"
 
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
@@ -46,7 +45,7 @@ def handle_webhook():
         "embeds": [
             {
                 "title": "📌 새 트랜잭션 발생!",
-                "color": 16711680,  # 빨간색 (디스코드 색상 코드)
+                "color": 16711680,  # 빨간색
                 "fields": [
                     {"name": "🆔 거래 해시", "value": f"`{tx_hash}`", "inline": False},
                     {"name": "📦 토큰", "value": f"{token_name} ({token_symbol})", "inline": True},
@@ -66,7 +65,7 @@ def handle_webhook():
     if response.status_code == 204:
         return jsonify({"status": "success"}), 200
     else:
-        return jsonify({"error": "Failed to send to Discord"}), 500
+        return jsonify({"error": f"Failed to send to Discord: {response.status_code}, {response.text}"}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=True, host='0.0.0.0', port=5001)
