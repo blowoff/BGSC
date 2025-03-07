@@ -3,7 +3,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
-# .env 파일 로드 (보안 강화)
+# .env 파일 로드
 load_dotenv()
 
 app = Flask(__name__)
@@ -18,14 +18,18 @@ def home():
 
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
+    print("[LOG] 웹훅 요청 받음")  # 로그 출력
+
     # 헤더에서 웹훅 토큰 검증
     received_token = request.headers.get("Arkham-Webhook-Token")
     if received_token != ARKHAM_WEBHOOK_TOKEN:
+        print("[ERROR] 웹훅 토큰 불일치")  # 로그 출력
         return jsonify({"error": "Unauthorized"}), 403
 
     # JSON 데이터 받기
     data = request.json
     if not data or "transfer" not in data:
+        print("[ERROR] 웹훅 데이터 형식 오류")  # 로그 출력
         return jsonify({"error": "Invalid data"}), 400
 
     # 전송된 데이터 추출
@@ -63,9 +67,32 @@ def handle_webhook():
     response = requests.post(DISCORD_WEBHOOK_URL, json=discord_message)
 
     if response.status_code == 204:
+        print("[SUCCESS] 디스코드 전송 완료")  # 로그 출력
         return jsonify({"status": "success"}), 200
     else:
+        print(f"[ERROR] 디스코드 전송 실패: {response.status_code}, {response.text}")  # 로그 출력
         return jsonify({"error": f"Failed to send to Discord: {response.status_code}, {response.text}"}), 500
+
+# ✅ 테스트용 엔드포인트 추가
+@app.route('/test-webhook', methods=['GET'])
+def test_webhook():
+    test_data = {
+        "alertName": "Test Alert",
+        "transfer": {
+            "transactionHash": "0x123456789abcdef",
+            "tokenName": "TestToken",
+            "tokenSymbol": "TTK",
+            "unitValue": 1000,
+            "fromAddress": {"address": "0xFromAddress"},
+            "toAddress": {"address": "0xToAddress"},
+            "blockTimestamp": "2025-03-08 12:00:00"
+        }
+    }
+
+    print("[LOG] 테스트 웹훅 실행 중...")  # 로그 출력
+    response = requests.post("http://127.0.0.1:5001/webhook", json=test_data, headers={"Arkham-Webhook-Token": ARKHAM_WEBHOOK_TOKEN})
+    
+    return response.json(), response.status_code
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5001)
