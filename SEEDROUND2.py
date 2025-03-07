@@ -61,4 +61,4 @@ def handle_webhook():
         return jsonify({"error": "Failed to send to Discord"}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)
