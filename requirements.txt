@@ -1,6 +1,3 @@
 flask
 requests
 gunicorn
-
-docker builder prune -a
-docker build --no-cache -t my-app .
