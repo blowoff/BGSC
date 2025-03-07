@@ -1,8 +1,13 @@
 import requests
 import json
 
-webhook_url = "https://discord.com/api/webhooks/..."  # 디스코드 웹훅 URL
+# 디스코드 웹훅 URL
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1347635345717465270/2z46mlr1py-Jp5Yak60UCWSHiacLy0iLf3scw27c72x7haqdpgd9218XQRrK9Y5KsAE0"
 
+# Arkham 웹훅 토큰 추가
+ARKHAM_WEBHOOK_TOKEN = "rzDAPMrKgRjpTi"
+
+# 데이터 구성
 data = {
     "username": "Arkham Alerts",
     "embeds": [
@@ -45,8 +50,14 @@ data = {
     ]
 }
 
-headers = {"Content-Type": "application/json"}
-response = requests.post(webhook_url, data=json.dumps(data), headers=headers)
+# 헤더에 Arkham 웹훅 토큰 추가
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {ARKHAM_WEBHOOK_TOKEN}"
+}
+
+# 디스코드 웹훅으로 데이터 전송
+response = requests.post(DISCORD_WEBHOOK_URL, data=json.dumps(data), headers=headers)
 
 if response.status_code == 204:
     print("✅ 웹훅 전송 성공!")
