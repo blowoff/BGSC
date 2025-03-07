@@ -4,7 +4,7 @@ import requests
 app = Flask(__name__)
 
 # Arkham 제공 웹훅 토큰
-ARKHAM_WEBHOOK_TOKEN = "rzDAPMrKgRjpTi"
+ARKHAM_WEBHOOK_TOKEN = "Mmda5FmsFuCBdZ"
 
 # 디스코드 웹훅 URL (네가 설정한 디스코드 웹훅으로 변경!)
 DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1347635345717465270/2z46mlr1py-Jp5Yak60UCWSHiacLy0iLf3scw27c72x7haqdpgd9218XQRrK9Y5KsAE0"
