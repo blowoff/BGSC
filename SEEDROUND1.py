@@ -96,3 +96,19 @@ def test_webhook():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5001)
+
+from dotenv import load_dotenv
+import os
+
+# .env 파일 로드
+load_dotenv()
+
+# 환경 변수 읽기
+arkham_token = os.getenv("ARKHAM_WEBHOOK_TOKEN")
+discord_webhook = os.getenv("DISCORD_WEBHOOK_URL")
+
+print("ARKHAM_WEBHOOK_TOKEN:", arkham_token)
+print("DISCORD_WEBHOOK_URL:", discord_webhook)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001, debug=True)
