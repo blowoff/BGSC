@@ -94,8 +94,6 @@ def test_webhook():
     
     return response.json(), response.status_code
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5001)))
 
 from dotenv import load_dotenv
 import os
@@ -111,4 +109,5 @@ print("ARKHAM_WEBHOOK_TOKEN:", arkham_token)
 print("DISCORD_WEBHOOK_URL:", discord_webhook)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    print("Flask 앱이 Gunicorn으로 실행됩니다.")
+
