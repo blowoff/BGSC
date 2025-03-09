@@ -94,6 +94,6 @@ def test_webhook():
     
     return response.json(), response.status_code
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5001)))
+if __name__ == "__main__":
+    print("Flask 앱이 Gunicorn으로 실행됩니다.")
 
